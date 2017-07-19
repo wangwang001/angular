@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/angular1.6.3.js"></script>
+		<script src="js/angular-animate1.6.4.js"></script>
+		<style>
+			.myName.ng-invalid {
+			    background-color: lightblue;
+			}
+			.myName.ng-valid {
+			    background-color: bisque;
+			}
+			
+			table, th , td {
+			  border: 1px solid grey;
+			  border-collapse: collapse;
+			  padding: 5px;
+			}
+			table tr:nth-child(odd) {
+			  background-color: #f1f1f1;
+			}
+			table tr:nth-child(even) {
+			  background-color: #ffffff;
+			}
+			div.ani {
+			  transition: all linear 0.5s;
+			  background-color: lightblue;
+			  height: 100px;
+			  width: 300px;
+			  position: relative;
+			  top: 0;
+			  left: 0;
+			}
+			
+			.ani.ng-hide {
+			  height: 0;
+			  width: 0;
+			  background-color: transparent;
+			  top:-200px;
+			  left: 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<div ng-app="myApp" ng-controller="myCtrl" ng-init="firstName='Jhon'">
+			<!--ng-model-->
+			<p>名字：<input type="text" ng-model="name"/></p>
+			<h1>Hello {{name}}</h1>
+			<br /> <br />
+			<!--ng-bind-->
+			<p>姓名：<span ng-bind="firstName"></span></p>
+			<br /> <br />
+			<!--ng-show-->
+			<form ng-app="" name="myForm">
+			    Email:
+			    <input type="email" name="myAddress" ng-model="text">
+			    <span ng-show="myForm.myAddress.$error.email">不是一个合法的邮箱地址</span>
+			    <br /> <br />
+			<!--ng-valid-->
+			    输入你的名字:
+    			<input class="myName" name="myName" ng-model="text1" required>
+			</form>
+			<br /> <br />
+			<!--scope-->
+			<input ng-model="name1">
+		    <h1>{{greeting}}</h1>
+		    <button ng-click='sayHello()'>点我</button> 
+		    
+			<br /> <br />
+			
+			<!--ng-repeat-->
+			ng-repeat：
+			<ul>
+				<li ng-repeat='x in arr'>{{x}}</li>
+			</ul>
+			<!--过滤器-->
+			过滤器uppercase:<p>姓名为 {{ lastName1 | uppercase }}</p>
+			过滤器lowercase:<p>姓名为 {{ lastName1 | lowercase }}</p>
+			
+			<!--currency-->
+			过滤器currency:
+			<input type="number" ng-model="quantity">
+			<input type="number" ng-model="price">
+			<p>总价 = {{ (quantity * price) | currency }}</p>
+			
+			<br /><br />
+			
+			<!--orderBy-->
+			过滤器orderBy:
+			<ul>
+			  <li ng-repeat="x in names | orderBy:'country'">
+			    {{ x.name + ', ' + x.country }}
+			  </li>
+			</ul>
+			
+			<br /><br />
+			
+			<!--$timeout服务-->
+			<p>两秒后显示信息:</p>
+			<h1>{{myHeader}}</h1>
+			
+			<br /><br />
+			
+			<!--$Interval服务-->
+			<p>现在时间是:</p>
+			<h1>{{theTime}}</h1>
+			
+			<br /><br />
+			
+			<!--select  ng-options-->
+			<select ng-init="selectedName = selectALL[0]" ng-model="selectedName" ng-options="x for x in selectALL"></select>
+			<br /><br />
+			<!--ng-repeat-->
+			ng-repeat:
+			<select ng-model="selectedSite">
+				<option ng-repeat="x in sites" value="{{x.url}}">{{x.site}}</option>
+			</select>
+			<h1>你选择的是: {{selectedSite}}</h1>
+			
+			<br /><br />
+			
+			ng-options:
+			<select ng-model="selectedSite1" ng-options="x.site for x in sites"></select>
+			<h1>你选择的是: {{selectedSite1.site}}</h1>
+			<p>网址为: {{selectedSite1.url}}</p>
+			
+			<br />
+			
+			<p>选择一辆车:</p>
+			<select ng-model="selectedCar" ng-options="y.brand for (x, y) in cars"></select>
+			<p>你选择的是: {{selectedCar.brand}}</p>
+			<p>型号为: {{selectedCar.model}}</p>
+			<p>颜色为: {{selectedCar.color}}</p>
+​			
+			<br />
+			
+			<table>
+			  <tr ng-repeat="x in table1">
+			    <td>{{x.Name}}</td>
+			    <td>{{x.Country}}</td>
+			  </tr>
+			</table>
+			
+			<br />
+			
+			ng-disabled：
+			<div ng-init="mySwitch=true">
+				<p><button ng-disabled='mySwitch'>点我！</button></p>
+				<p><input type="checkbox" ng-model="mySwitch"/></p>
+				<p>{{ mySwitch }}</p>
+			</div>
+			
+			<br />
+			
+			<button ng-click="count=count+1">点我增加数值！</button>
+			<p>{{count}}</p>
+			
+			<br />
+			
+			<button ng-click="toggle()">隐藏/显示</button>
+			<p ng-hide="myVar">
+				名：<input type="text" ng-model="firstName2" />
+				姓名：<input type="text" ng-model="lastName2" />
+				<br />
+				Full Name:{{firstName2+" " +lastName2}}
+			</p>
+			
+			<br />
+			
+			<form>
+				check to show a header:
+				<input type="checkbox" ng-model="myVar1" />
+			</form>
+			<h1 ng-show="myVar1">My Header</h1>
+			
+			<br />
+			
+			<form>
+				选择一个选项：
+				<input type="radio" ng-model="myVar2" value="dogs"/>Dogs
+				<input type="radio" ng-model="myVar2" value="tuts"/>Tuts
+				<input type="radio" ng-model="myVar2" value="cars"/>Cars
+			</form>
+			<div ng-switch="myVar2">
+				<div ng-switch-when="dogs">
+					<h1>Dogs</h1>
+					<p>Welcome to a world of dogs.</p>
+				</div>
+				<div ng-switch-when="tuts">
+					<h1>Tuts</h1>
+					<p>Learn from examples.</p>
+				</div>
+				<div ng-switch-when="cars">
+					<h1>Cars</h1>
+					<p>Read about cars.</p>
+				</div>
+			</div>
+			<p>ng-switch 指令根据单选按钮的选择结果显示或隐藏 HTML 区域。</p>
+			
+			<br />
+			
+			<form novalidate>
+				First Name:<br />
+				<input type="text" ng-model="user.firstName3" />
+				<br />
+				Last Name:<br />
+				<input type="text" ng-model="user.lastName3"/>
+				<br />
+				<button ng-click="reset()">重置</button>
+				<p>form = {{user}}</p>
+				<p>master = {{master}}</p>
+			</form>
+			
+			<br />
+			
+			<form novalidate ng-app="" name="myForm1">
+				<p>
+					用户名：<br />
+					<input type="text" name="user1" ng-model="User" required/>
+					<span style="color: red;" ng-show="myForm1.user1.$dirty && myForm1.user1.$invalid">
+						<span ng-show="myForm1.user1.$error.required">用户名是必须的</span>
+					</span>
+				</p>
+				<p>
+					邮箱：<br />
+					<input type="email" name="email1" ng-model="Email" required/>
+					<span style="color: red;" ng-show="myForm1.email1.$dirty && myForm1.email1.$invalid">
+						<span ng-show="myForm1.email1.$error.required">邮箱是必须的</span>
+						<span ng-show="myForm1.email1.$error.email">非法的邮箱</span>
+					</span>
+				</p>
+				<p>
+					<input type="submit" ng-disabled="myForm1.user1.$dirty && myForm1.user1.$invalid || myForm1.email1.$dirty && myForm1.email1.$invalid" />
+				</p>
+			</form>
+			
+			<br />
+			angular动画：
+			<br />
+			隐藏DIV：<input type="checkbox" ng-model="myCheck"/>
+			<div ng-hide="myCheck" class="ani"></div>
+			
+		</div>
+		
+	</body>
+	<script>
+		var app = angular.module('myApp',['ngAnimate']);
+		app.controller('myCtrl',function($scope,$http,$timeout,$interval){
+			$scope.name1 = "Runoob";
+		    $scope.sayHello = function() {
+		        $scope.greeting = 'Hello ' + $scope.name1 + '!';
+		    };
+		    
+		    $scope.arr=["Email","Tobias","Linus"];
+		    
+		    
+		    $scope.firstName1 = "John",
+		    $scope.lastName1 = "Doe",
+		    $scope.fullName = function() {
+		        return $scope.firstName1 + " " + $scope.lastName1;
+		    }
+		    
+		    $scope.names = [
+		        {name:'Jani',country:'Norway'},
+		        {name:'Hege',country:'Sweden'},
+		        {name:'Kai',country:'Denmark'}
+		    ];
+		    
+		    
+		    //服务$timeout
+		     $scope.myHeader = "Hello World!";
+			    $timeout(function () {
+			        $scope.myHeader = "How are you today?";
+			    }, 2000);
+			    
+		     //服务$interval
+		     $scope.theTime = new Date().toLocaleTimeString();
+			  $interval(function () {
+			      $scope.theTime = new Date().toLocaleTimeString();
+			  }, 1000);
+		     
+		     //ng-options
+		     $scope.selectALL = ["Google", "Runoob", "Taobao"];
+		     
+		     
+		     $scope.sites = [
+			    {site : "Google", url : "http://www.google.com"},
+			    {site : "Runoob", url : "http://www.runoob.com"},
+			    {site : "Taobao", url : "http://www.taobao.com"}
+			];
+			
+			
+			 $scope.cars = {
+		        car01 : {brand : "Ford", model : "Mustang", color : "red"},
+		        car02 : {brand : "Fiat", model : "500", color : "white"},
+		        car03 : {brand : "Volvo", model : "XC90", color : "black"}
+		    }
+			 
+			//$http 需要启动服务xampp
+			$http.get("js/customers.php")
+			.then(function (response) {
+			  $scope.table1 = response.data.records;
+			});
+			  
+			$scope.firstName2 = "Jhon",
+			$scope.lastName2 = "Doe",
+			$scope.myVar = false;
+			$scope.toggle = function(){
+				$scope.myVar = !$scope.myVar;
+			}
+			
+			
+			$scope.master = {firstName3:"Jhon",lastName3:"Doe"};
+			$scope.reset = function(){
+				$scope.user = angular.copy($scope.master);
+			}
+			$scope.reset();
+			
+			//输入校验  novalidate用于禁用浏览器默认的校验
+			$scope.User = 'John Doe';
+			$scope.Email = 'jhon.doe@gmail.com';
+			
+			
+			
+		});
+		
+		
+	</script>
+</html>

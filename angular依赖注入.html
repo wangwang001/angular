@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/angular1.6.5.js"></script>
+	</head>
+	<body>
+		<div ng-app="myApp" ng-controller="myCtrl">
+			<p>输入一个数字：<input type="number" ng-model="number"/></p>
+			<button ng-click="square()">X<sup>2</sup></button>
+			<p>结果：{{result}}</p>
+		</div>
+	</body>
+	<script>
+		var app = angular.module('myApp',[]);
+		app.value('defaultInput',6);
+		app.factory('MathService',function(){
+			var factory = {};
+			factory.multiply = function(a,b){
+				return a*b;
+			}
+			return factory;
+		});
+		app.service('CalService',function(MathService){
+			this.square = function(a){
+				return MathService.multiply(a,a);
+			}
+		});
+		app.controller('myCtrl',function($scope,CalService,defaultInput){
+			$scope.number = defaultInput;
+			$scope.result = CalService.square($scope.number);
+			$scope.square = function(){
+				$scope.result = CalService.square($scope.number);
+			}
+		});
+	</script>
+</html>

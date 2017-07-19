@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>路由</title>
+		<script src="js/angular1.6.4.js"></script>
+		<script src="js/angular-route1.6.4.js"></script>
+	</head>
+	<body ng-app="myApp">
+		<h2>AngularJS路由</h2>
+		<ul>
+			<li><a href="#/">首页</a></li>
+			<li><a href="#/computers">电脑</a></li>
+			<li><a href="#/printers">打印机</a></li>
+			<li><a href="#/blabla">其他</a></li>
+		</ul>
+		<div ng-view></div>
+	</body>
+	<script>
+	/*	angular1.6版本中路由解决方案
+		1, <a href="#!/">首页</a>
+		2, .config(["$locationProvider",'$routeProvider',function($locationProvider,$routeProvider){
+			 $locationProvider.hashPrefix(''); 
+	*/
+		angular.module('myApp',['ngRoute'])
+		.config(["$locationProvider",'$routeProvider',function($locationProvider,$routeProvider){
+			$locationProvider.hashPrefix(''); 
+			$routeProvider
+			.when('/',{
+				template:'这是首页页面'
+			})
+			.when('/computers',{
+				template:'这是电脑分类页面'
+			})
+			.when('/printers',{
+				template:'这是打印机页面'
+			})
+			.otherwise({redirectTo:'/'});
+		}]);
+	</script>
+</html>
